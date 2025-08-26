@@ -3,9 +3,9 @@ set(GEMM_DATATYPE "fp8;fp16" CACHE STRING "List of datatypes for GEMM (semicolon
 set(GEMM_LAYOUT "rcr" CACHE STRING "List of layout for GEMM (semicolon-separated)")
 
 function(build_gemm_for_datatype datatype layout)
-    # Filter GPU targets to only gfx90a, gfx942, and gfx950
+    # Filter GPU targets to only gfx908, gfx90a, gfx942, and gfx950
     set(GEMM_GPU_TARGETS "")
-    set(DESIRED_TARGETS "gfx90a;gfx942;gfx950")
+    set(DESIRED_TARGETS "gfx908;gfx90a;gfx942;gfx950")
     
     foreach(target IN LISTS SUPPORTED_GPU_TARGETS)
         if(target IN_LIST DESIRED_TARGETS)
@@ -15,7 +15,7 @@ function(build_gemm_for_datatype datatype layout)
     
     # Skip compilation if no matching targets found
     if(NOT GEMM_GPU_TARGETS)
-        message(WARNING "Skipping Tile Engine GEMM compilation: No supported GPU targets (gfx90a, gfx942, gfx950) found in SUPPORTED_GPU_TARGETS: ${SUPPORTED_GPU_TARGETS}")
+        message(WARNING "Skipping Tile Engine GEMM compilation: No supported GPU targets (gfx908, gfx90a, gfx942, gfx950) found in SUPPORTED_GPU_TARGETS: ${SUPPORTED_GPU_TARGETS}")
         return()
     endif()
     

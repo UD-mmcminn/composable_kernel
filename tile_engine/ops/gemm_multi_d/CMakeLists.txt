@@ -4,9 +4,9 @@ set(GEMM_MULTI_D_LAYOUT "rcrr" CACHE STRING "List of layout for GEMM Multi D(sem
 set(GEMM_MULTI_D_ELEMENTWISE_FUNCTION "mul"  CACHE STRING "Elementwise function")
 
 function(build_gemm_multi_d_for_datatype_layout datatype layout)
-    # Filter GPU targets to only gfx90a, gfx942, and gfx950
+    # Filter GPU targets to only gfx908, gfx90a, gfx942, and gfx950
     set(GEMM_GPU_TARGETS "")
-    set(DESIRED_TARGETS "gfx90a;gfx942;gfx950")
+    set(DESIRED_TARGETS "gfx908;gfx90a;gfx942;gfx950")
     
     foreach(target IN LISTS SUPPORTED_GPU_TARGETS)
         if(target IN_LIST DESIRED_TARGETS)
@@ -16,7 +16,7 @@ function(build_gemm_multi_d_for_datatype_layout datatype layout)
     
     # Skip compilation if no matching targets found
     if(NOT GEMM_GPU_TARGETS)
-        message(WARNING "Skipping Tile Engine GEMM Multi D compilation: No supported GPU targets (gfx90a, gfx942, gfx950) found in SUPPORTED_GPU_TARGETS: ${SUPPORTED_GPU_TARGETS}")
+        message(WARNING "Skipping Tile Engine GEMM Multi D compilation: No supported GPU targets (gfx908, gfx90a, gfx942, gfx950) found in SUPPORTED_GPU_TARGETS: ${SUPPORTED_GPU_TARGETS}")
         return()
     endif()
     
