@@ -5,6 +5,12 @@
 
 #include "ck_tile/core.hpp"
 
+#ifdef __HIP_DEVICE_COMPILE__
+#define DEVICE_UNSUPPORTED(ins) static_assert(#ins " is unsupported on this platform")
+#else
+#define DEVICE_UNSUPPORTED(ins)
+#endif
+
 namespace ck_tile {
 
 // TODO: refactor warp-gemm
@@ -104,6 +110,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K32
 #if defined(__gfx950__)
             c_vec = __builtin_amdgcn_mfma_f32_16x16x32_bf16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K32);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -118,6 +125,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K32
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_16x16x32_bf16(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K32);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -167,6 +175,9 @@ struct WarpGemmAttributeMfmaImplF16F16F32M32N32K8
 #if defined(__gfx9__)
             c_vec = __builtin_amdgcn_mfma_f32_32x32x8f16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+#ifdef __HIP_DEVICE_COMPILE__
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M32N32K8);
+#endif
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -181,6 +192,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M32N32K8
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_32x32x8f16(a_vec, b_vec, fp32x16_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M32N32K8);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -230,6 +242,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M16N16K16
 #if defined(__gfx9__)
             c_vec = __builtin_amdgcn_mfma_f32_16x16x16f16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M16N16K16);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -244,6 +257,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M16N16K16
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_16x16x16f16(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M16N16K16);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -293,6 +307,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M16N16K32
 #if defined(__gfx950__)
             c_vec = __builtin_amdgcn_mfma_f32_16x16x32_f16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M16N16K32);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -307,6 +322,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M16N16K32
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_16x16x32_f16(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M16N16K32);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -357,6 +373,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M4N64K4
 #if defined(__gfx9__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4f16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M4N64K4);
             ignore = c_vec;
             ignore = a_vec;
             ignore = b_vec;
@@ -371,6 +388,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M4N64K4
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4f16(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M4N64K4);
         ignore = a_vec;
         ignore = b_vec;
         return CVecType{0.f};
@@ -421,6 +439,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M64N4K4
 #if defined(__gfx9__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4f16(a_vec, b_vec, c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M64N4K4);
             ignore = c_vec;
             ignore = a_vec;
             ignore = b_vec;
@@ -435,6 +454,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M64N4K4
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4f16(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M64N4K4);
         ignore = a_vec;
         ignore = b_vec;
         return CVecType{0.f};
@@ -497,6 +517,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K8
                     0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K8);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -525,6 +546,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K8
         });
         return c_vec;
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K8);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -585,6 +607,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K16
                     0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K16);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -613,6 +636,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K16
         });
         return c_vec;
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M16N16K16);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -660,9 +684,22 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4
         DISPATCH_MFMA_CTRL_("v_mfma_f32_4x4x4bf16_1k", Ctrl)
         else
         {
-#if defined(__gfx9__)
+#if defined(__gfx90a__) || defined(__gfx94__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, c_vec, 0, 0, 0);
+#elif defined(__gfx908__)
+            static_for<0, 2, 1>{}([&](auto k) {
+                c_vec = __builtin_amdgcn_mfma_f32_4x4x2bf16(
+                    reinterpret_cast<const thread_buffer<ADataType, 4>&>(a_vec)
+                        .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                    reinterpret_cast<const thread_buffer<BDataType, 4>&>(b_vec)
+                        .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                    c_vec,
+                    0,
+                    0,
+                    0);
+            });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4);
             ignore = c_vec;
             ignore = a_vec;
             ignore = b_vec;
@@ -673,10 +710,25 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4
     // c_vec = a_vec * b_vec
     CK_TILE_DEVICE CVecType operator()(const AVecType& a_vec, const BVecType& b_vec) const
     {
-#if defined(__gfx9__)
+#if defined(__gfx90a__) || defined(__gfx94__)
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
+#elif defined(__gfx908__)
+        CVecType c_vec{0.f};
+        static_for<0, 2, 1>{}([&](auto k) {
+            c_vec = __builtin_amdgcn_mfma_f32_4x4x2bf16(
+                reinterpret_cast<const thread_buffer<ADataType, 4>&>(a_vec)
+                    .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                reinterpret_cast<const thread_buffer<BDataType, 4>&>(b_vec)
+                    .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                c_vec,
+                0,
+                0,
+                0);
+        });
+        return c_vec;  
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4);
         ignore = a_vec;
         ignore = b_vec;
         return CVecType{0.f};
@@ -724,9 +776,22 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4
         DISPATCH_MFMA_CTRL_("v_mfma_f32_4x4x4bf16_1k", Ctrl)
         else
         {
-#if defined(__gfx9__)
+#if defined(__gfx90a__) || defined(__gfx94__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, c_vec, 0, 0, 0);
+#elif defined(__gfx908__)
+            static_for<0, 2, 1>{}([&](auto k) {
+                c_vec = __builtin_amdgcn_mfma_f32_4x4x2bf16(
+                    reinterpret_cast<const thread_buffer<ADataType, 4>&>(a_vec)
+                        .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                    reinterpret_cast<const thread_buffer<BDataType, 4>&>(b_vec)
+                        .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                    c_vec,
+                    0,
+                    0,
+                    0);
+            });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4);
             ignore = c_vec;
             ignore = a_vec;
             ignore = b_vec;
@@ -737,10 +802,25 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4
     // c_vec = a_vec * b_vec
     CK_TILE_DEVICE CVecType operator()(const AVecType& a_vec, const BVecType& b_vec) const
     {
-#if defined(__gfx9__)
+#if defined(__gfx90a__) || defined(__gfx94__)
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
+#elif defined(__gfx908__)
+        CVecType c_vec{0.f};
+        static_for<0, 2, 1>{}([&](auto k) {
+            c_vec = __builtin_amdgcn_mfma_f32_4x4x2bf16(
+                reinterpret_cast<const thread_buffer<ADataType, 4>&>(a_vec)
+                    .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                reinterpret_cast<const thread_buffer<BDataType, 4>&>(b_vec)
+                    .template get_as<ext_vector_t<bf16_t, 2>>()[number<k>{}],
+                c_vec,
+                0,
+                0,
+                0);
+        });
+        return c_vec; 
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4);
         ignore = a_vec;
         ignore = b_vec;
         return CVecType{0.f};
@@ -815,6 +895,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M32N32K16
                     0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M32N32K16);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -856,6 +937,7 @@ struct WarpGemmAttributeMfmaImplF16F16F32M32N32K16
         });
         return c_vec;
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplF16F16F32M32N32K16);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -929,6 +1011,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K16
                     0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K16);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -970,6 +1053,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K16
         });
         return c_vec;
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImplBf16Bf16F32M32N32K16);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -1106,6 +1190,7 @@ struct WarpGemmAttributeMfmaImpl_f32_16x16x32_f8_base
                 c_vec = __builtin_amdgcn_mfma_f32_16x16x32_bf8_bf8(
                     bit_cast<int64_t>(a_vec), bit_cast<int64_t>(b_vec), c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_16x16x32_f8_base);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -1130,6 +1215,7 @@ struct WarpGemmAttributeMfmaImpl_f32_16x16x32_f8_base
             return bit_cast<CVecType>(__builtin_amdgcn_mfma_f32_16x16x32_bf8_bf8(
                 bit_cast<int64_t>(a_vec), bit_cast<int64_t>(b_vec), CVecType{0.f}, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_16x16x32_f8_base);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -1276,6 +1362,7 @@ struct WarpGemmAttributeMfmaImpl_f32_32x32x16_f8_base
                 c_vec = __builtin_amdgcn_mfma_f32_32x32x2f32(a_f32, b_f32, c_vec, 0, 0, 0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_32x32x16_f8_base);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -1313,6 +1400,7 @@ struct WarpGemmAttributeMfmaImpl_f32_32x32x16_f8_base
         });
         return c_vec;
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_32x32x16_f8_base);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -1394,6 +1482,7 @@ struct WarpGemmAttributeMfmaImpl_f32_16x16x128_f8_bf8_base
             c_vec = __builtin_amdgcn_mfma_scale_f32_16x16x128_f8f6f4(
                 a_vec, b_vec, c_vec, 1, 1, 0, 0, 0, 0);
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_16x16x128_f8_bf8_base);
         ck_tile::ignore = c_vec;
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
@@ -1417,6 +1506,7 @@ struct WarpGemmAttributeMfmaImpl_f32_16x16x128_f8_bf8_base
             return bit_cast<CVecType>(__builtin_amdgcn_mfma_scale_f32_16x16x128_f8f6f4(
                 a_vec, b_vec, CVecType{0.f}, 1, 1, 0, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_16x16x128_f8_bf8_base);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -1492,6 +1582,7 @@ struct WarpGemmAttributeMfmaImpl_f32_32x32x64_f8_bf8_base
             c_vec = __builtin_amdgcn_mfma_scale_f32_32x32x64_f8f6f4(
                 a_vec, b_vec, c_vec, 1, 1, 0, 0, 0, 0);
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_32x32x64_f8_bf8_base);
         ck_tile::ignore = c_vec;
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
@@ -1515,6 +1606,7 @@ struct WarpGemmAttributeMfmaImpl_f32_32x32x64_f8_bf8_base
             return bit_cast<CVecType>(__builtin_amdgcn_mfma_scale_f32_32x32x64_f8f6f4(
                 a_vec, b_vec, CVecType{0.f}, 1, 1, 0, 0, 0, 0));
 #else
+        DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_f32_32x32x64_f8_bf8_base);
         ck_tile::ignore = a_vec;
         ck_tile::ignore = b_vec;
         return CVecType{0.f};
@@ -1593,6 +1685,7 @@ struct WarpGemmAttributeMfmaImpl_i32_32x32x16_i8
                 c_vec = __builtin_amdgcn_mfma_f32_32x32x2f32(a_f32, b_f32, c_vec, 0, 0, 0);
             });
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_i32_32x32x16_i8);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -1652,6 +1745,7 @@ struct WarpGemmAttributeMfmaImpl_i32_16x16x32_i8
             c_vec = __builtin_amdgcn_mfma_i32_16x16x32_i8(
                 bit_cast<int64_t>(a_vec), bit_cast<int64_t>(b_vec), c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_i32_16x16x32_i8);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -1711,6 +1805,7 @@ struct WarpGemmAttributeMfmaImpl_i32_16x16x64_i8
             c_vec = __builtin_amdgcn_mfma_i32_16x16x64_i8(
                 bit_cast<int64_t>(a_vec), bit_cast<int64_t>(b_vec), c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_i32_16x16x64_i8);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
@@ -1770,6 +1865,7 @@ struct WarpGemmAttributeMfmaImpl_i32_32x32x32_i8
             c_vec = __builtin_amdgcn_mfma_i32_32x32x32_i8(
                 a_vec, bit_cast<int64_t>(b_vec), c_vec, 0, 0, 0);
 #else
+            DEVICE_UNSUPPORTED(WarpGemmAttributeMfmaImpl_i32_32x32x32_i8);
             ck_tile::ignore = c_vec;
             ck_tile::ignore = a_vec;
             ck_tile::ignore = b_vec;
