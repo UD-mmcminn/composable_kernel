@@ -534,7 +534,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4
         DISPATCH_MFMA_CTRL_("v_mfma_f32_4x4x4bf16_1k", Ctrl)
         else
         {
-#if defined(__gfx90a__) || defined(__gfx942__) || defined(__gfx950__)
+#if defined(__gfx90a__) || defined(__gfx94__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, c_vec, 0, 0, 0);
 #elif defined(__gfx908__)
             static_for<0, 2, 1>{}([&](auto k) {
@@ -559,7 +559,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M4N64K4
     // c_vec = a_vec * b_vec
     CK_TILE_DEVICE CVecType operator()(const AVecType& a_vec, const BVecType& b_vec) const
     {
-#if defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx950__)
+#if defined(__gfx90a__) || defined(__gfx94__)
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #elif defined(__gfx908__)
@@ -624,7 +624,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4
         DISPATCH_MFMA_CTRL_("v_mfma_f32_4x4x4bf16_1k", Ctrl)
         else
         {
-#if defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx950__)
+#if defined(__gfx90a__) || defined(__gfx94__)
             c_vec = __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, c_vec, 0, 0, 0);
 #elif defined(__gfx908__)
             static_for<0, 2, 1>{}([&](auto k) {
@@ -649,7 +649,7 @@ struct WarpGemmAttributeMfmaImplBf16Bf16F32M64N4K4
     // c_vec = a_vec * b_vec
     CK_TILE_DEVICE CVecType operator()(const AVecType& a_vec, const BVecType& b_vec) const
     {
-#if defined(__gfx90a__) || defined(__gfx94__) || defined(__gfx950__)
+#if defined(__gfx90a__) || defined(__gfx94__)
         return bit_cast<CVecType>(
             __builtin_amdgcn_mfma_f32_4x4x4bf16_1k(a_vec, b_vec, fp32x4_t{0.f}, 0, 0, 0));
 #elif defined(__gfx908__)
